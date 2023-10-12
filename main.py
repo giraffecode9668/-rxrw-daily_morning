@@ -48,6 +48,6 @@ client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
 # wea, temperature = get_weather()
-data = {"weather":{"value":"天气"}}
+data = {"weacher":{"value":"天气"}}
 res = wm.send_template(user_id, template_id, data)
 print(res)

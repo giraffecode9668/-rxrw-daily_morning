@@ -17,13 +17,13 @@ def get_weather_work():
   url = "https://restapi.amap.com/v3/weather/weatherInfo?city=440305&extensions=all&key=" + weather_key
   res = requests.get(url).json()
   weather_entity = res['forecasts'][0]
-  return weather_entity['city'], weather_entity['casts'][0]['dayweather'], math.floor(weather_entity['casts'][0]['daytemp_float'])
+  return weather_entity['city'], weather_entity['casts'][0]['dayweather'], weather_entity['casts'][0]['daytemp_float']
 
 def get_weather_live():
   url = "https://restapi.amap.com/v3/weather/weatherInfo?city=440305&extensions=all&key=" + weather_key
   res = requests.get(url).json()
   weather_entity = res['forecasts'][0]
-  return weather_entity['city'], weather_entity['casts'][0]['dayweather'], math.floor(weather_entity['casts'][0]['daytemp_float'])
+  return weather_entity['city'], weather_entity['casts'][0]['dayweather'], weather_entity['casts'][0]['daytemp_float']
 
 
 def get_words():

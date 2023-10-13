@@ -42,5 +42,6 @@ wm = WeChatMessage(client)
 wk_city, wk_dayweather, wk_daytemp_float = get_weather_work()
 lv_city, lv_dayweather, lv_daytemp_float = get_weather_live()
 data = {"wk_city":{"value":wk_city}, "wk_dayweather":{"value":wk_dayweather}, "wk_daytemp_float":{"value":wk_daytemp_float}, "lv_city":{"value":lv_city}, "lv_dayweather":{"value":lv_dayweather}, "lv_daytemp_float":{"value":lv_daytemp_float}, "words":{"value":get_words(), "color":get_random_color()}}
+print(data)
 res = wm.send_template(user_id, template_id, data)
 print(res)

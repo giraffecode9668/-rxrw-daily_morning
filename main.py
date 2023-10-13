@@ -6,33 +6,27 @@ import requests
 import os
 import random
 
-today = datetime.now()
-start_date = os.environ['START_DATE']
-city = os.environ['CITY']
-birthday = os.environ['BIRTHDAY']
-
 app_id = os.environ["APP_ID"]
 app_secret = os.environ["APP_SECRET"]
 
 user_id = os.environ["USER_ID"]
 template_id = os.environ["TEMPLATE_ID"]
 
+weather_key = os.environ["WEATHER_KEY"]
 
-def get_weather():
-  url = "http://autodev.openspeech.cn/csp/api/v2.1/weather?openId=aiuicus&clientType=android&sign=android&city=" + city
+
+def get_weather_work():
+  url = "https://restapi.amap.com/v3/weather/weatherInfo?city=440305&extensions=all&key=" + weather_key
   res = requests.get(url).json()
-  weather = res['data']['list'][0]
-  return weather['weather'], math.floor(weather['temp'])
+  weather_entity = res['forecasts'][0]
+  return weather_entity['city'], weather_entity['casts'][0]['dayweather'], math.floor(weather_entity['casts'][0]['daytemp_float'])
 
-def get_count():
-  delta = today - datetime.strptime(start_date, "%Y-%m-%d")
-  return delta.days
+def get_weather_live():
+  url = "https://restapi.amap.com/v3/weather/weatherInfo?city=440305&extensions=all&key=" + weather_key
+  res = requests.get(url).json()
+  weather_entity = res['forecasts'][0]
+  return weather_entity['city'], weather_entity['casts'][0]['dayweather'], math.floor(weather_entity['casts'][0]['daytemp_float'])
 
-def get_birthday():
-  next = datetime.strptime(str(date.today().year) + "-" + birthday, "%Y-%m-%d")
-  if next < datetime.now():
-    next = next.replace(year=next.year + 1)
-  return (next - today).days
 
 def get_words():
   words = requests.get("https://api.shadiao.pro/chp")
@@ -47,7 +41,8 @@ def get_random_color():
 client = WeChatClient(app_id, app_secret)
 
 wm = WeChatMessage(client)
-# wea, temperature = get_weather()
-data = {"weacher":{"value":"天气"}}
+wk_city, wk_dayweather, wk_daytemp_float = get_weather_work()
+lv_city, lv_dayweather, lv_daytemp_float = get_weather_live()
+data = {"wk_city":{"value":wk_city}, "wk_dayweather":{"value":wk_dayweather}, "wk_daytemp_float":{"value":wk_daytemp_float}, "lv_city":{"value":lv_city}, "lv_dayweather":{"value":lv_dayweather}, "lv_daytemp_float":{"value":lv_daytemp_float}, "words":{"value":get_words(), "color":get_random_color()}}
 res = wm.send_template(user_id, template_id, data)
 print(res)
